@@ -9,6 +9,7 @@ from threading import Thread
 
 api = "http://api.quotable.io/random"
 quotes = []
+i_quote = 0
 
 # Tkinter Window
 window = tk.Tk()
@@ -20,28 +21,33 @@ window.overrideredirect(1)
 # Functions
 def load_quotes():
     global quotes
-    for i in range(30):
+    global i_quote
+    for i in range(10):
         random_quote = requests.get(api).json()
         content = random_quote["content"]
+        # Skip quote if more than 120 characters (4 lines)
+        if len(content) > 120:
+            continue
         author = random_quote["author"]
-        quote = content + "\n\n" + "~ " + author
+        quote = "- #" + str(i_quote) + " " + author + " -" + "\n\n" + content
+        i_quote += 1
 
         quotes.append(quote)
 
 load_quotes()
 
 # UI
-quote_label = tk.Label(window, font=("Advent Pro Light", 20), background="black", foreground="white", wraplength=590)
-quote_label.pack(padx=20, pady=10)
+quote_label = tk.Label(window, font=("Minecraftia", 18), background="black", foreground="white", wraplength=590)
+quote_label.pack(padx=35, pady=10)
 quote_label.place(relx=.5, rely=.5, anchor="c")
 
 def get_random_quote():
     global quote_label
     global quotes
 
-    quote_label.config(text=quotes.pop())
+    quote_label.config(text=quotes.pop(0))
 
-    if len(quotes) == 11:
+    if len(quotes) == 1:
         thread = Thread(target=load_quotes)
         thread.start()
 
@@ -49,8 +55,8 @@ def get_random_quote():
 get_random_quote()
 
 def change():
-    quote_label.after(1000, change)
-    print(len(quotes))
+    # Update every 10 minutes
+    quote_label.after(600000, change)
     get_random_quote()
 
 
