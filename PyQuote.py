@@ -7,6 +7,8 @@ import tkinter as tk
 import datetime as dt
 from threading import Thread
 
+MINUTE_INTERVAL = 0.2
+
 api = "http://api.quotable.io/random"
 quotes = []
 i_quote = 0
@@ -44,13 +46,13 @@ def save():
     f.write(curr_quote + "\n\n")
     f.close()
     # Disable button after one click
-    save_button.config(state="disabled")
+    save_button.config(text="SAVED",state="disabled")
 
 # UI
 quote_label = tk.Label(window, font=("Minecraftia", 18), background="black", foreground="white", wraplength=590)
 quote_label.pack(padx=35, pady=10)
 quote_label.place(relx=.5, rely=.5, anchor="c")
-save_button = tk.Button(window, text="SAVE", font=("Minecraftia", 12), background="black", foreground="white", activebackground="black", relief="solid", anchor="c", command=save)
+save_button = tk.Button(window, font=("Minecraftia", 12), background="black", foreground="white", activebackground="black", relief="sunken", borderwidth=0, anchor="w", command=save)
 save_button.tkraise()
 save_button.pack(side="top", anchor="ne", padx=10, pady=10)
 
@@ -62,7 +64,7 @@ def get_random_quote():
     curr_quote = quotes.pop(0)
     quote_label.config(text=curr_quote)
     # Re-enable button
-    save_button.config(state="normal")
+    save_button.config(text="> SAVE", state="normal")
 
     if len(quotes) == 1:
         thread = Thread(target=load_quotes)
@@ -72,8 +74,8 @@ def get_random_quote():
 get_random_quote()
 
 def change():
-    # Update every 10 minutes
-    quote_label.after(600000, change)
+    minute_to_ms = MINUTE_INTERVAL*60000
+    quote_label.after(int(minute_to_ms), change)
     get_random_quote()
 
 
