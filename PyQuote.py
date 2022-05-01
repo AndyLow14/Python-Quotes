@@ -7,7 +7,7 @@ import tkinter as tk
 import datetime as dt
 from threading import Thread
 
-MINUTE_INTERVAL = 0.2
+MINUTE_INTERVAL = 10
 
 api = "http://api.quotable.io/random"
 quotes = []
