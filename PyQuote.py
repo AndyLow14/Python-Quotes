@@ -8,6 +8,8 @@ import datetime as dt
 from threading import Thread
 
 MINUTE_INTERVAL = 10
+ASUS = 860
+TUF = 1980
 
 api = "http://api.quotable.io/random"
 quotes = []
@@ -16,7 +18,7 @@ curr_quote = ""
 
 # Tkinter Window
 window = tk.Tk()
-window.geometry('625x270+1980+50')
+window.geometry('625x270+'+ str(ASUS) +'+50')
 window.title("PyQuote")
 window.configure(background='black')
 window.overrideredirect(1)
